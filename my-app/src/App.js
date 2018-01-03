@@ -6,6 +6,7 @@ import {
 
 import ProductListing from './atomic/pages/ProductListing';
 import ProductPage from './atomic/pages/ProductPage';
+import CartPage from './atomic/pages/CartPage';
 
 
 class App extends Component {
@@ -14,7 +15,8 @@ class App extends Component {
           <Router>
               <div>
                 <Route exact path="/" component={ProductListing}/>
-                <Route path="/product-page/" component={ProductPage}/>
+                  <Route path="/product-page/" component={ProductPage}/>
+                  <Route path="/cart/" component={CartPage}/>
               </div>
           </Router>
       );

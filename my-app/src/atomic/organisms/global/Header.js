@@ -35,12 +35,6 @@ class Header extends React.Component {
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
-                            {/*<NavItem>
-                                <NavLink href="/components/">Components</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
-                            </NavItem>*/}
                             <UncontrolledDropdown nav>
                                 <DropdownToggle nav caret>
                                     Pages
@@ -51,6 +45,9 @@ class Header extends React.Component {
                                     </DropdownItem>
                                     <DropdownItem>
                                         <NavLink href="/product-page/">Product Page</NavLink>
+                                    </DropdownItem>
+                                    <DropdownItem>
+                                        <NavLink href="/cart/">Cart</NavLink>
                                     </DropdownItem>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
