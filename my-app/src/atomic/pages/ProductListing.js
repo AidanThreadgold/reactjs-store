@@ -13,7 +13,7 @@ class ProductListing extends React.Component {
         this.getProducts();
     }
     getProducts() {
-        fetch("http://m222.magento2.local/rest/V1/products?searchCriteria[pageSize]=12", {
+        fetch("http://m222.magento2.local/rest/V1/products?searchCriteria[pageSize]=12&searchCriteria[filter_groups][0][filters][0][field]=name&searchCriteria[filter_groups][0][filters][0][value]=%25backpack%25&searchCriteria[filter_groups][0][filters][0][condition_type]=like", {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -28,7 +28,7 @@ class ProductListing extends React.Component {
         const products = this.state.products.map((product) =>
             <Col xs="4" key={product.id}>
                 <Card>
-                    <img top width="100%" src={`http://m222.magento2.local/media/catalog/product${product.custom_attributes[1].value}`} alt="Card image cap" />
+                    <img width="100%" src={`http://m222.magento2.local/media/catalog/product${product.custom_attributes[1].value}`} alt="Card image cap" />
                     <CardBody>
                         <CardTitle>{product.name}</CardTitle>
                         <CardSubtitle>£{product.price}</CardSubtitle>

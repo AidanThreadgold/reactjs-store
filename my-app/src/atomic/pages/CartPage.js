@@ -1,26 +1,63 @@
 import React from 'react';
-import { Container, Row, Col, Media } from 'reactstrap';
-import { Button } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardSubtitle, CardText, Alert } from 'reactstrap';
 import Header from '../organisms/global/Header'
+import Cookies from "universal-cookie";
 
 class CartPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.toggle = this.toggle.bind(this);
         this.state = {
-            activeTab: '1'
+            cartItems: [],
+            message: null
         };
     }
+    componentDidMount() {
+        this.getCart();
+    }
+    getCart() {
+        const cookies = new Cookies();
 
-    toggle(tab) {
-        if (this.state.activeTab !== tab) {
+        if (cookies.get("cart-id")) {
+            fetch("http://m222.magento2.local/rest/V1/guest-carts/" + cookies.get('cart-id'), {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer 1wuqsc1pgy4a3omc92wi4p2mbs62ubvi'
+                }
+            })
+                .then((response) => response.json())
+                .then(data => this.setState({
+                    cartItems: data.items,
+                    loading: false
+                }));
+        } else {
             this.setState({
-                activeTab: tab
-            });
+                message: (
+                    <Container>
+                        <Row>
+                            <Alert color="warning">You have no items in your cart!</Alert>
+                        </Row>
+                    </Container>
+                )
+            })
         }
     }
     render() {
+
+        const products = this.state.cartItems.map((product) =>
+            <Col xs="4" key={product.sku}>
+                <Card>
+                    <CardBody>
+                        <CardTitle>{product.name} ({product.sku})</CardTitle>
+                        <CardSubtitle>£{product.price}</CardSubtitle>
+                        <CardText>Qty: {product.qty}</CardText>
+                    </CardBody>
+                </Card>
+            </Col>
+        );
+
         return (
             <div>
                 <Header />
@@ -30,15 +67,11 @@ class CartPage extends React.Component {
                             <h1>Cart Page</h1>
                         </Col>
                     </Row>
+                </Container>
+                {this.state.message}
+                <Container>
                     <Row>
-                        <Col xs="1">
-                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=64&h=64" />
-                        </Col>
-                        <Col xs="9">
-                            <h3>Product Name</h3>
-                            <p>£12.00</p>
-                            <Button color="primary" size="sm">Remove</Button>
-                        </Col>
+                        {products}
                     </Row>
                 </Container>
             </div>
