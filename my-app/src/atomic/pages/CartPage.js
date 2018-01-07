@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { Card, CardBody, CardTitle, CardSubtitle, CardText, Alert } from 'reactstrap';
 import Header from '../organisms/global/Header'
 import Cookies from "universal-cookie";
+import PayPalButton from '../PayPalButton';
 
 class CartPage extends React.Component {
     constructor(props) {
@@ -19,6 +20,16 @@ class CartPage extends React.Component {
     getCart() {
         const cookies = new Cookies();
 
+        this.setState({
+            message: (
+                <Container>
+                    <Row>
+                        <Alert color="info">Loading...</Alert>
+                    </Row>
+                </Container>
+            )
+        })
+
         if (cookies.get("cart-id")) {
             fetch("http://m222.magento2.local/rest/V1/guest-carts/" + cookies.get('cart-id'), {
                 method: 'GET',
@@ -30,7 +41,8 @@ class CartPage extends React.Component {
                 .then((response) => response.json())
                 .then(data => this.setState({
                     cartItems: data.items,
-                    loading: false
+                    loading: false,
+                    message: null
                 }));
         } else {
             this.setState({
@@ -45,7 +57,6 @@ class CartPage extends React.Component {
         }
     }
     render() {
-
         const products = this.state.cartItems.map((product) =>
             <Col xs="4" key={product.sku}>
                 <Card>
@@ -72,6 +83,9 @@ class CartPage extends React.Component {
                 <Container>
                     <Row>
                         {products}
+                    </Row>
+                    <Row>
+                        <PayPalButton />
                     </Row>
                 </Container>
             </div>
